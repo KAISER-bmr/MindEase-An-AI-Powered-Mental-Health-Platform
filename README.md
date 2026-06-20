@@ -1,18 +1,59 @@
 # 🌱 MindEase — AI Mental Health Support Platform
 
-A full-stack web application built for college students to get emotional support, track their mood, and take mental health self-assessments.
+> An AI-powered mental health support platform built for college students - providing emotional support, mood tracking, and self-assessment tools.
+
+---
+
+## 📸 Screenshots
+
+### Login Page
+<!-- Add screenshot here -->
+![Login Page](screenshots/login.png)
+
+### Dashboard
+<!-- Add screenshot here -->
+![Dashboard](screenshots/dashboard.png)
+
+### Mood Tracker
+<!-- Add screenshot here -->
+![Mood Tracker](screenshots/mood-tracker.png)
+
+### Self-Assessment
+<!-- Add screenshot here -->
+![Assessment](screenshots/assessment.png)
+
+### Settings
+<!-- Add screenshot here -->
+![Settings](screenshots/settings.png)
+
+> **Note:** The AI Chat feature requires a valid API key to run and is not demonstrated in screenshots.
+
+---
+
+## 👨‍💻 Team
+
+| Name | Role |
+|------|------|
+| **Prathamesh Chaumwal** | Backend — FastAPI, JWT Auth, AI Integration |
+| **Parth Chaudhari** | Frontend — React 18, UI/UX |
+| **Chandan Choudhary** | Research, Documentation & Frontend Support |
+| **Gokul Krishnan A V** | Database — MySQL Schema & Management |
+
+**Guide:** Prof. Komal Rajgude
+**Department:** Computer Science Engineering (AI & DS)
+**Project Type:** Community Engineering Project
 
 ---
 
 ## 🏗️ Tech Stack
 
-| Layer      | Technology                  |
-|------------|-----------------------------|
-| Frontend   | React 18, React Router, Recharts |
-| Backend    | Python 3.10+, FastAPI       |
-| Database   | MySQL 8+                    |
-| AI         | Anthropic Claude API        |
-| Auth       | JWT (python-jose + bcrypt)  |
+| Layer      | Technology                        |
+|------------|-----------------------------------|
+| Frontend   | React 18, React Router, Recharts  |
+| Backend    | Python 3.10+, FastAPI             |
+| Database   | MySQL 8+                          |
+| AI         | Anthropic Claude API (OpenRouter) |
+| Auth       | JWT (python-jose + bcrypt)        |
 
 ---
 
@@ -27,7 +68,7 @@ mindease/
 │   ├── auth.py              # JWT + password hashing
 │   ├── dependencies.py      # Auth middleware
 │   ├── models.py            # Pydantic schemas
-│   ├── ai_service.py        # Anthropic API integration
+│   ├── ai_service.py        # AI API integration
 │   ├── schema.sql           # MySQL table definitions
 │   ├── requirements.txt
 │   ├── .env.example
@@ -44,18 +85,21 @@ mindease/
         ├── App.js
         ├── index.js
         ├── index.css
-        ├── api.js           # Axios client
+        ├── api.js
         ├── context/
         │   └── AuthContext.js
         ├── components/
-        │   └── Layout.js    # Sidebar navigation
+        │   ├── Sidebar.js
+        │   └── Topbar.js
         └── pages/
             ├── Login.js
             ├── Register.js
             ├── Dashboard.js
             ├── Chat.js
             ├── MoodTracker.js
-            └── Assessment.js
+            ├── Assessment.js
+            ├── Exercises.js
+            └── Settings.js
 ```
 
 ---
@@ -66,20 +110,27 @@ mindease/
 - Python 3.10+
 - Node.js 18+
 - MySQL 8+
-- An Anthropic API key (get one at https://console.anthropic.com)
+- An AI API key (Anthropic or OpenRouter)
 
 ---
 
 ### Step 1 — MySQL Database
 
-```bash
-# Log into MySQL
-mysql -u root -p
+Open PowerShell / Terminal and log into MySQL:
 
-# Run the schema
+```bash
+# Windows (if mysql not in PATH)
+& "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p
+
+# Mac / Linux
+mysql -u root -p
+```
+
+Once inside the MySQL shell, run:
+
+```sql
 source /path/to/mindease/backend/schema.sql
-# OR
-mysql -u root -p < backend/schema.sql
+exit
 ```
 
 ---
@@ -89,24 +140,28 @@ mysql -u root -p < backend/schema.sql
 ```bash
 cd mindease/backend
 
-# Create virtual environment
+# Create and activate virtual environment
 python -m venv venv
 
-# Activate it
-# On Windows:
+# Windows
 venv\Scripts\activate
-# On Mac/Linux:
+
+# Mac / Linux
 source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+pip install email-validator
+pip install bcrypt==4.0.1
 
-# Create .env file
-cp .env.example .env
+# Create your .env file
+copy .env.example .env     # Windows
+cp .env.example .env       # Mac/Linux
 ```
 
-Now edit `.env` with your values:
-```
+Edit `.env` with your values:
+
+```env
 DB_HOST=localhost
 DB_PORT=3306
 DB_NAME=mindease
@@ -115,32 +170,32 @@ DB_PASSWORD=YOUR_MYSQL_PASSWORD
 
 JWT_SECRET=any-long-random-string-here
 
-ANTHROPIC_API_KEY=sk-ant-...your-key...
+ANTHROPIC_API_KEY=your-api-key-here
 ```
 
 Start the backend:
+
 ```bash
-uvicorn main:app --reload --port 8000
+python -m uvicorn main:app --port 8000
 ```
 
-✅ Backend running at: http://localhost:8000
-📖 API docs at: http://localhost:8000/docs
+✅ Backend running at: `http://localhost:8000`
+📖 API docs at: `http://localhost:8000/docs`
 
 ---
 
 ### Step 3 — Frontend Setup
 
+Open a **new terminal window** (keep backend running):
+
 ```bash
 cd mindease/frontend
 
-# Install packages
 npm install
-
-# Start the React app
 npm start
 ```
 
-✅ Frontend running at: http://localhost:3000
+✅ Frontend running at: `http://localhost:3000`
 
 ---
 
@@ -152,11 +207,13 @@ npm start
 - Sentiment analysis on user messages
 - Crisis helpline info automatically included
 
+> ⚠️ **Note:** The AI chat requires a valid API key set in `.env`. The feature will not work without one.
+
 ### 📊 Mood Tracker
 - Daily mood logging (1–10 score)
 - Stress, anxiety, and sleep tracking
 - Visual charts (mood over time, stress/anxiety trends)
-- Entry history
+- Entry history with notes
 
 ### 📋 Self-Assessments
 - **PHQ-9** – Depression screening
@@ -166,9 +223,16 @@ npm start
 - Personalised recommendations
 - Full assessment history
 
+### 🌬️ Exercises
+- Breathing exercises (Box, 4-7-8, 2:1 Calm)
+- Animated breathing circle with guided phases
+- 5-4-3-2-1 Grounding technique
+- Reflective journaling with prompts
+
 ### 🔐 Authentication
 - Secure registration & login
 - JWT tokens with 24h expiry
+- bcrypt password hashing
 - Protected routes on both frontend and backend
 
 ---
@@ -187,28 +251,30 @@ npm start
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | /auth/register | Create account |
-| POST | /auth/login | Login & get token |
-| POST | /chat/message | Send message, get AI reply |
-| GET  | /chat/sessions | List all chat sessions |
-| GET  | /chat/sessions/{id}/messages | Get messages in session |
-| POST | /mood/log | Log mood entry |
-| GET  | /mood/history | Get mood logs |
-| GET  | /mood/stats | Get mood statistics |
-| POST | /assessment/submit | Submit assessment |
-| GET  | /assessment/history | Get assessment history |
+| POST | `/auth/register` | Create account |
+| POST | `/auth/login` | Login & get token |
+| POST | `/chat/message` | Send message, get AI reply |
+| GET  | `/chat/sessions` | List all chat sessions |
+| GET  | `/chat/sessions/{id}/messages` | Get messages in session |
+| POST | `/mood/log` | Log mood entry |
+| GET  | `/mood/history` | Get mood logs |
+| GET  | `/mood/stats` | Get mood statistics |
+| POST | `/assessment/submit` | Submit assessment |
+| GET  | `/assessment/history` | Get assessment history |
 
 ---
 
 ## 🧪 Quick Test
 
-1. Open http://localhost:3000
-2. Click "Create an account"
-3. Register with your name, email, password
-4. You'll land on the Dashboard
-5. Click "Talk to MindEase" to chat
-6. Try "Log Today's Mood" to track your mood
-7. Take a "Self-Assessment" for a health check
+1. Open `http://localhost:3000`
+2. Click **"Create an account"**
+3. Register with your name, email, and password
+4. You'll land on the **Dashboard**
+5. Try **"Log Today's Mood"** to track your mood
+6. Take a **"Self-Assessment"** for a mental health check
+7. Try the **Exercises** page for breathing & grounding
+
+> The AI Chat page requires an API key to function.
 
 ---
 
