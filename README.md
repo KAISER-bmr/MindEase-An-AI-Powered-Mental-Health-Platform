@@ -22,9 +22,9 @@
 <!-- Add screenshot here -->
 ![Assessment](screenshots/assessment.png)
 
-### Settings
+### AI Chat Bot
 <!-- Add screenshot here -->
-![Settings](screenshots/settings.png)
+![Settings](screenshots/chatbot.png)
 
 > **Note:** The AI Chat feature requires a valid API key to run and is not demonstrated in screenshots.
 
